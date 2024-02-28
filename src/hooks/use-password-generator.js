@@ -1,0 +1,43 @@
+import { useState } from "react";
+const usePasswordGenerator = () => {
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const generatePassword = (checkboxData, length) => {
+    let charset = "",
+      generatedPassword = "";
+    const selectedOption = checkboxData.filter(
+      (checkbox) => checkbox.state === true
+    );
+    if(selectedOption.length===0){
+        setErrorMessage("select atleast one option")
+        setPassword("")
+        return
+    }
+    selectedOption.forEach((option) => {
+      switch (option.title) {
+        case "Include Uppercase Letters":
+          charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          break;
+        case "Include Lovercase Letters":
+          charset += "abcdefghijklmnopqrstuvwxyz";
+          break;
+        case "Include Numers":
+          charset += "0123456789";
+          break;
+        case "Include Symbols":
+          charset += "!@#$%^&*()";
+          break;
+        default:
+          break;
+      }
+    });
+    for(let i=0;i<length;i++){
+        const randomIndex =Math.floor(Math.random()*charset.length)
+        generatedPassword+=charset[randomIndex]
+    }
+    setPassword(generatedPassword)
+    setErrorMessage("")
+  };
+  return { password, errorMessage, generatePassword };
+};
+export default usePasswordGenerator;
